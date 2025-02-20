@@ -1,5 +1,6 @@
 import sys
 import math
+import pytest
 from PyQt5.QtWidgets import (
     QApplication,
     QWidget,
@@ -50,14 +51,33 @@ class GCDApp(QWidget):
                 QMessageBox.warning(self, "Помилка", "Числа мають бути додатними!")
                 return
 
-            gcd_result = math.gcd(num1, num2)
+            gcd_result = self.get_gcd(num1, num2)
             self.result_label.setText(f"Результат: НСД({num1}, {num2}) = {gcd_result}")
         except ValueError:
             QMessageBox.warning(self, "Помилка", "Введіть коректні цілі числа!")
 
+    @staticmethod
+    def get_gcd(a: int, b: int) -> int:
+        """Обчислює НСД двох чисел"""
+        return math.gcd(a, b)
 
-if __name__ == "__main__":
+
+# Функція для запуску додатку
+def run_app():
     app = QApplication(sys.argv)
     window = GCDApp()
     window.show()
     sys.exit(app.exec_())
+
+
+if __name__ == "__main__":
+    run_app()
+
+
+# Тести для pytest
+def test_gcd():
+    assert GCDApp.get_gcd(48, 18) == 6
+    assert GCDApp.get_gcd(101, 103) == 1
+    assert GCDApp.get_gcd(56, 98) == 14
+    assert GCDApp.get_gcd(270, 192) == 6
+    assert GCDApp.get_gcd(25, 5) == 5
